@@ -13,8 +13,6 @@ public privileged aspect AddOpponent{
 
 	private BoardPanel C4Dialog.boardPanel;
 
-	static int counter = 1;
-
 	pointcut changePlayers(C4Dialog dialog): 
 		execution(* C4Dialog.makeMove(int)) && target(dialog);
 
@@ -38,13 +36,13 @@ public privileged aspect AddOpponent{
 	}
 
 	after(C4Dialog dialog) : changePlayers(dialog)  {
-		if(counter % 2 == 0) {
-			dialog.changeTurn(players.get(2));
-			counter++;
+		if(!dialog.board.isWonBy(dialog.player)) {
+			if(dialog.player.name() == "Blue") {
+				dialog.changeTurn(players.get(1));
+			}
+			else {
+				dialog.changeTurn(players.get(2));
+			}	
 		}
-		else {
-			dialog.changeTurn(players.get(1));
-			counter++;
-		}	
 	}
 }
